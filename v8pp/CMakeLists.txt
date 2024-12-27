@@ -58,7 +58,7 @@ endif()
 
 #set(CMAKE_CXX_RTTI OFF)
 if(MSVC)
-	set(V8PP_COMPILE_OPTIONS /GR- /EHsc /permissive- /W4)
+	set(V8PP_COMPILE_OPTIONS /GR- /EHsc /permissive- /W4 /Zc:__cplusplus)
 	# disable specific warnings
 	list(APPEND V8PP_COMPILE_OPTIONS /wd4190)
 	# set warning level 3 for system headers

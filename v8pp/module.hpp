@@ -82,8 +82,10 @@ public:
 		v8::HandleScope scope(isolate_);
 
 #if V8_MAJOR_VERSION > 12 || (V8_MAJOR_VERSION == 12 && V8_MINOR_VERSION >= 1)
-		obj_->SetAccessor(v8pp::to_v8(isolate_, name),
-			&var_get<Variable>, &var_set<Variable>,
+		v8::AccessorNameGetterCallback getter = &var_get<Variable>;
+		v8::AccessorNameSetterCallback setter = &var_set<Variable>;
+		obj_->SetNativeDataProperty(v8pp::to_v8(isolate_, name),
+			getter, setter,
 			detail::external_data::set(isolate_, &var),
 			v8::PropertyAttribute(v8::DontDelete));
 #else
@@ -110,12 +112,12 @@ public:
 		v8::HandleScope scope(isolate_);
 
 		using Traits = detail::none;
-		v8::AccessorGetterCallback getter = property_type::template get<Traits>;
-		v8::AccessorSetterCallback setter = property_type::is_readonly ? nullptr : property_type::template set<Traits>;
-		v8::Local<v8::String> v8_name = v8pp::to_v8(isolate_, name);
+		v8::AccessorNameGetterCallback getter = property_type::template get<Traits>;
+		v8::AccessorNameSetterCallback setter = property_type::is_readonly ? nullptr : property_type::template set<Traits>;
+		v8::Local<v8::Name> v8_name = v8pp::to_v8(isolate_, name);
 		v8::Local<v8::Value> data = detail::external_data::set(isolate_, property_type(std::move(get), std::move(set)));
 #if V8_MAJOR_VERSION > 12 || (V8_MAJOR_VERSION == 12 && V8_MINOR_VERSION >= 1)
-		obj_->SetAccessor(v8_name, getter, setter, data, v8::PropertyAttribute(v8::DontDelete));
+		obj_->SetNativeDataProperty(v8_name, getter, setter, data, v8::PropertyAttribute(v8::DontDelete));
 #else
 		obj_->SetAccessor(v8_name, getter, setter, data, v8::DEFAULT, v8::PropertyAttribute(v8::DontDelete));
 #endif
@@ -151,7 +153,7 @@ public:
 
 private:
 	template<typename Variable>
-	static void var_get(v8::Local<v8::String>,
+	static void var_get(v8::Local<v8::Name>,
 		v8::PropertyCallbackInfo<v8::Value> const& info)
 	{
 		v8::Isolate* isolate = info.GetIsolate();
@@ -161,7 +163,7 @@ private:
 	}
 
 	template<typename Variable>
-	static void var_set(v8::Local<v8::String>, v8::Local<v8::Value> value,
+	static void var_set(v8::Local<v8::Name>, v8::Local<v8::Value> value,
 		v8::PropertyCallbackInfo<void> const& info)
 	{
 		v8::Isolate* isolate = info.GetIsolate();

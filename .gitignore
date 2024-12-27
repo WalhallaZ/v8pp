@@ -13,3 +13,7 @@
 *.so
 *.o
 *.a
+/build
+/.vscode
+/.idea
+/cmake-build-*

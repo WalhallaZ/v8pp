@@ -7,12 +7,12 @@ project(v8pp
 	LANGUAGES CXX
 )
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_SHARED_LIBS "Build shared library" ON)
-option(BUILD_TESTING "Build and run tests" OFF)
+option(BUILD_TESTING "Build and run tests" ON)
 option(BUILD_DOCUMENTATION "Build documentation" OFF)
 
 # Custom project options

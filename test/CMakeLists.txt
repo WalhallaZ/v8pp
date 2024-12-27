@@ -26,6 +26,8 @@ if(V8PP_HEADER_ONLY)
 	endif()
 endif()
 
+target_compile_definitions (v8pp_test PRIVATE USING_V8_PLATFORM_SHARED)
+
 target_link_libraries(v8pp_test v8pp ${CMAKE_DL_LIBS})
 
 add_test(v8pp_test ${PROJECT_BINARY_DIR}/v8pp_test --version --run-tests)

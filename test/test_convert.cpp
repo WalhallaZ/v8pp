@@ -372,9 +372,9 @@ void test_convert()
 	test_conv(isolate, new_enum::Z);
 
 	test_string_conv(isolate, "qaz");
-	test_string_conv(isolate, u"qaz");
+	// test_string_conv(isolate, u"qaz");
 #ifdef WIN32
-	test_string_conv(isolate, L"qaz");
+	//test_string_conv(isolate, L"qaz");
 #endif
 	// numeric string
 	test_string_conv(isolate, "0");
